@@ -43,7 +43,6 @@ def set_realesrgan():
     return upsampler
 
 pmrf_path = os.path.join(folder_paths.models_dir, "pmrf")
-upsampler = set_realesrgan()
 pmrf = MMSERectifiedFlow.from_pretrained(pmrf_path).to(device=device)
 
 def generate_reconstructions(pmrf_model, x, y, non_noisy_z0, num_flow_steps, device):
@@ -97,6 +96,7 @@ def enhance_face(img, face_helper, num_flow_steps, scale=2, interpolation=cv2.IN
 
     # upsample the background
     # Now only support RealESRGAN for upsampling background
+    upsampler = set_realesrgan()
     bg_img = upsampler.enhance(img, outscale=scale)[0]
     face_helper.get_inverse_affine(None)
     # paste each restored face to the input image
