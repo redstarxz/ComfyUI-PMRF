@@ -42,8 +42,6 @@ def set_realesrgan():
     )
     return upsampler
 
-pmrf_path = os.path.join(folder_paths.models_dir, "pmrf")
-pmrf = MMSERectifiedFlow.from_pretrained(pmrf_path).to(device=device)
 
 def generate_reconstructions(pmrf_model, x, y, non_noisy_z0, num_flow_steps, device):
     source_dist_samples = pmrf_model.create_source_distribution_samples(
@@ -74,7 +72,8 @@ def enhance_face(img, face_helper, num_flow_steps, scale=2, interpolation=cv2.IN
     face_helper.input_img = resize(face_helper.input_img, 640, interpolation)
     face_helper.get_face_landmarks_5(only_center_face=False, eye_dist_threshold=5)
     face_helper.align_warp_face()
-
+    pmrf_path = os.path.join(folder_paths.models_dir, "pmrf")
+    pmrf = MMSERectifiedFlow.from_pretrained(pmrf_path).to(device=device)
     # face restoration
     for i, cropped_face in tqdm(enumerate(face_helper.cropped_faces)):
         cropped_face_t = img2tensor(cropped_face / 255.0, bgr2rgb=True, float32=True)
