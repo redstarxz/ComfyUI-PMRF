@@ -134,7 +134,7 @@ def inference(
         img = img[:, :, ::-1].copy()
         h, w = img.shape[0:2]
         size = min(h, w)
-        
+
         face_scale = scale*(size/640)
         face_scale = face_scale if face_scale < scale else scale
         face_scale = face_scale if face_scale > 1.0 else 1.0
@@ -147,7 +147,7 @@ def inference(
             save_ext="png",
             use_parse=True,
             device=device,
-            model_rootpath=None,
+            model_rootpath=folder_paths.models_dir+'/facexlib' ,
         )
 
         cropped_face, restored_faces, restored_img = enhance_face(
@@ -188,7 +188,7 @@ class PMRF:
 
     def pmrf(self, images, scale, num_steps, seed, interpolation):
         return inference(images, scale, num_steps, seed, interpolation)
-    
+
 NODE_CLASS_MAPPINGS = {
     "PMRF": PMRF,
 }
