@@ -414,7 +414,7 @@ class NeighborhoodSelfAttentionBlock(nn.Module):
         qkv = self.qkv_proj(x)
         if natten is None:
             raise ModuleNotFoundError("natten is required for neighborhood attention")
-        if natten.has_fused_na():
+        if natten:
             q, k, v = rearrange(qkv, "n h w (t nh e) -> t n h w nh e", t=3, e=self.d_head)
             q, k = scale_for_cosine_sim(q, k, self.scale[:, None], 1e-6)
             theta = self.pos_emb(pos)
